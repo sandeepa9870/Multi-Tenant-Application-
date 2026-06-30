@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class RegisterRequest {
+public class CreateAdminRequest {
 
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -20,9 +20,6 @@ public class RegisterRequest {
     private String password;
 
     private String phoneNumber; // Optional phone number
-
-    // Note: Role is always ROLE_USER for public registration
-    // Admins can only be created by Super Admin via /api/super-admin/users endpoint
 
     // getters and setters
 

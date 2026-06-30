@@ -80,16 +80,12 @@ public class AuthServiceImpl implements AuthService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPhone(request.getPhoneNumber());
 
-        String roleName = request.getRole() == null ? "ROLE_USER" : request.getRole();
-        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new ApiException("Role not found: " + roleName));
-
-        user.getRoles().add(role);
-
-        // if admin registration - require approval by super admin
-        if ("ROLE_ADMIN".equals(roleName)) {
-            user.setEnabled(false);
-        }
+        // Public registration is ALWAYS ROLE_USER
+        Role userRole = roleRepository.findByName("ROLE_USER").orElseThrow(() -> new ApiException("Role not found: ROLE_USER"));
+        user.getRoles().add(userRole);
+        user.setEnabled(true); // User registration is immediately enabled
 
         userRepository.save(user);
 
@@ -97,11 +93,11 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtUtil.generateAccessToken(user.getEmail(), roles);
         String refreshTokenStr = jwtUtil.generateRefreshToken(user.getEmail());
 
-        Claims refreshClaims2 = jwtUtil.getClaims(refreshTokenStr);
+        Claims refreshClaims = jwtUtil.getClaims(refreshTokenStr);
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(refreshTokenStr);
         refreshToken.setUser(user);
-        refreshToken.setExpiryDate(refreshClaims2.getExpiration().toInstant());
+        refreshToken.setExpiryDate(refreshClaims.getExpiration().toInstant());
         refreshTokenRepository.save(refreshToken);
 
         return new AuthResponse(accessToken, refreshTokenStr, jwtUtil.getClaims(accessToken).getExpiration().getTime());
