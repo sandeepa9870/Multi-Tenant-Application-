@@ -1,13 +1,7 @@
 package com.example.Multi_tenant.application;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
+// Legacy/duplicate class kept for compatibility but intentionally disabled to avoid multiple main classes.
+// The active application entry point is located at com.example.multitenant.MultiTenantApplication
 public class MultiTenantApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(MultiTenantApplication.class, args);
-	}
-
+    // Legacy main removed.
 }

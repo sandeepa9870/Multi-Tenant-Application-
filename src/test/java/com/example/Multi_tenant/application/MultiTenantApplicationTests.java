@@ -1,4 +1,4 @@
-package com.example.Multi_tenant.application;
+package com.example.multitenant;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
