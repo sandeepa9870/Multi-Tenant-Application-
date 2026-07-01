@@ -1,12 +1,17 @@
 package com.example.multitenant.service;
 
-import com.example.multitenant.dto.auth.AuthResponse;
-import com.example.multitenant.dto.auth.LoginRequest;
-import com.example.multitenant.dto.auth.RegisterRequest;
+import com.example.multitenant.dto.*;
 
 public interface AuthService {
-    AuthResponse login(LoginRequest request);
-    AuthResponse register(RegisterRequest request);
-    AuthResponse refreshToken(String refreshToken);
+    LoginResponse login(LoginRequest loginRequest);
+    void logout(String token);
+    LoginResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
+    void forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
+    void resetPassword(ResetPasswordRequest resetPasswordRequest);
+    void sendOtp(SendOtpRequest sendOtpRequest);
+    void verifyOtp(VerifyOtpRequest verifyOtpRequest);
+    void verifyEmail(VerifyEmailRequest verifyEmailRequest);
+    void changePassword(ChangePasswordRequest changePasswordRequest, String email);
+    UserResponse getCurrentUser(String email);
 }
 

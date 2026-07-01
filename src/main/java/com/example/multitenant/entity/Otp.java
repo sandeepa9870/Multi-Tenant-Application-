@@ -7,36 +7,36 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "refresh_tokens")
+@Table(name = "otps")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefreshToken {
+public class Otp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, columnDefinition = "TEXT")
-    private String token;
-
     @Column(nullable = false)
-    private LocalDateTime expiryDate;
+    private String otp;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
-    private Boolean revoked = false;
+    private LocalDateTime expiryDate;
+
+    @Column(nullable = false)
+    private Boolean used = false;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public RefreshToken(String token, LocalDateTime expiryDate, User user) {
-        this.token = token;
-        this.expiryDate = expiryDate;
+    public Otp(String otp, User user, LocalDateTime expiryDate) {
+        this.otp = otp;
         this.user = user;
-        this.revoked = false;
+        this.expiryDate = expiryDate;
+        this.used = false;
         this.createdAt = LocalDateTime.now();
     }
 

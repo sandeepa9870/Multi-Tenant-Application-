@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "refresh_tokens")
+@Table(name = "password_reset_tokens")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefreshToken {
+public class PasswordResetToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,24 +19,24 @@ public class RefreshToken {
     @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String token;
 
-    @Column(nullable = false)
-    private LocalDateTime expiryDate;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
-    private Boolean revoked = false;
+    private LocalDateTime expiryDate;
+
+    @Column(nullable = false)
+    private Boolean used = false;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public RefreshToken(String token, LocalDateTime expiryDate, User user) {
+    public PasswordResetToken(String token, User user, LocalDateTime expiryDate) {
         this.token = token;
-        this.expiryDate = expiryDate;
         this.user = user;
-        this.revoked = false;
+        this.expiryDate = expiryDate;
+        this.used = false;
         this.createdAt = LocalDateTime.now();
     }
 
