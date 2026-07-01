@@ -2,47 +2,30 @@ package com.example.multitenant.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tenants", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "tenantCode"),
-    @UniqueConstraint(columnNames = "email")
-})
-@Data
+@Table(name = "categories")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tenant {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String tenantName;
-
     @Column(nullable = false, unique = true)
-    private String tenantCode;
-
-    @Column
-    private String businessName;
-
-    @Column
-    private String ownerName;
-
-    @Column(unique = true)
-    private String email;
-
-    @Column
-    private String phone;
+    private String name;
 
     @Column(columnDefinition = "TEXT")
-    private String address;
+    private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subscription_plan_id")
-    private SubscriptionPlan subscriptionPlan;
+    @Column
+    private String imageUrl;
 
     @Column(nullable = false)
     private Boolean status = true;
@@ -53,9 +36,10 @@ public class Tenant {
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public Tenant(String tenantName, String tenantCode) {
-        this.tenantName = tenantName;
-        this.tenantCode = tenantCode;
+    public Category(String name, String description, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
         this.status = true;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

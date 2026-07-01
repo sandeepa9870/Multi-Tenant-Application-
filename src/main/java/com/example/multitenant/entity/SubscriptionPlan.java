@@ -2,47 +2,33 @@ package com.example.multitenant.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tenants", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "tenantCode"),
-    @UniqueConstraint(columnNames = "email")
-})
-@Data
+@Table(name = "subscription_plans")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tenant {
+public class SubscriptionPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String tenantName;
-
     @Column(nullable = false, unique = true)
-    private String tenantCode;
+    private String planName;
 
-    @Column
-    private String businessName;
+    @Column(nullable = false)
+    private Integer duration; // in months
 
-    @Column
-    private String ownerName;
-
-    @Column(unique = true)
-    private String email;
-
-    @Column
-    private String phone;
+    @Column(nullable = false)
+    private Double price;
 
     @Column(columnDefinition = "TEXT")
-    private String address;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subscription_plan_id")
-    private SubscriptionPlan subscriptionPlan;
+    private String features; // JSON or comma-separated
 
     @Column(nullable = false)
     private Boolean status = true;
@@ -53,9 +39,11 @@ public class Tenant {
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public Tenant(String tenantName, String tenantCode) {
-        this.tenantName = tenantName;
-        this.tenantCode = tenantCode;
+    public SubscriptionPlan(String planName, Integer duration, Double price, String features) {
+        this.planName = planName;
+        this.duration = duration;
+        this.price = price;
+        this.features = features;
         this.status = true;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
